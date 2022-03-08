@@ -22,7 +22,7 @@ The following **extensions** are implemented:
 
 Here's a walk-through of implemented features:
 
-| Start     | Finish      |
+| Before     | After      |
 |------------|-------------|
 | <img src=" --- "> | <img src=" --- " width=''> |
 
