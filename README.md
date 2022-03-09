@@ -4,9 +4,16 @@
 
 **Memory Game**
 
-Time spent: **X** hours spent in total
+"Memory Game" is the classic picture matching game - find pairs of matching cards that start face down. 
+It’s fun for all ages and a great way to exercise your brain and improve your concentration. 
+The app is ad-free with a clean interface.
+
+Time spent: **5** hours spent in total
 
 ## Functionality
+
+* Choose from various board sizes: 4 x 2, 6 x 3, and 6 x 4
+* Play with colorful icons in the default mode
 
 The following **required** functionality is completed:
 
@@ -24,7 +31,7 @@ Here's a walk-through of implemented features:
 
 | Before     | After      |
 |------------|-------------|
-| <img src=" --- "> | <img src=" --- " width=''> |
+| <img src="https://media.giphy.com/media/FfVgoD7KHsKUSTSyq4/giphy.gif"> | <img src="https://media.giphy.com/media/Y8LelsEWUUf2CxhmxY/giphy.gif" width=''> |
 
 GIF created with [Giphy](https://giphy.com).
 
