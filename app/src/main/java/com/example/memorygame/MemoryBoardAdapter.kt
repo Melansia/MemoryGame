@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import models.BoardSize
 import models.MemoryCard
@@ -54,6 +56,14 @@ class MemoryBoardAdapter(
         fun bind(position: Int) {
             val memoryCard = cards[position]
             imageButton.setImageResource(if(memoryCard.isFaceUp) memoryCard.identifier else R.drawable.ic_launcher_background)
+
+            // based on the value of property is matched or not to change the opacity
+            // if is the cards are matched we set it to a lower value in order to fade it out
+            imageButton.alpha = if (memoryCard.isMatched) .4f else 1.0f
+            // if the memory card is matched we can change the background of card so it will be a lil bit fade out
+            val colorStateList = if (memoryCard.isMatched) ContextCompat.getColorStateList(context, R.color.color_gray) else null
+            // here we set the color a grey background if card is matched
+            ViewCompat.setBackgroundTintList(imageButton, colorStateList)
 
             imageButton.setOnClickListener {
                 Log.i(TAG, "Click on position $position")
