@@ -1,4 +1,4 @@
-# My Maps
+# Memory Game
 
 ## *Gregory L*
 
