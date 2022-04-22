@@ -8,7 +8,7 @@
 It’s fun for all ages and a great way to exercise your brain and improve your concentration. 
 The app is ad-free with a clean interface.
 
-Time spent: **5** hours spent in total
+Time spent: **5** hours spent in total 
 
 ## Functionality
 
