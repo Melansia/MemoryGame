@@ -14,7 +14,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:enabled="false"
-        android:text="Save"
+        android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -28,7 +28,7 @@
         android:layout_marginBottom="8dp"
         android:digits="0123456789qwertyuiopasdfghjklzxcvbnm_-"
         android:ems="10"
-        android:hint="Game name (example: 'funny_bunny')"
+        android:hint="@string/game_name_example_funny_bunny"
         android:imeOptions="actionDone"
         android:importantForAutofill="no"
         android:inputType="text"
