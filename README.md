@@ -26,7 +26,7 @@ The following **extensions** are implemented:
 
 * [ ] 
 
-## Video Walkthrough
+## Video Walk-through
 
 Here's a walk-through of implemented features:
 
