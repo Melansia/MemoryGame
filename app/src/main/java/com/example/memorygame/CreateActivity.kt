@@ -15,8 +15,10 @@ import android.text.InputFilter
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
@@ -42,6 +44,7 @@ class CreateActivity : AppCompatActivity() {
     private lateinit var rvImagePicker: RecyclerView
     private lateinit var etGameName: EditText
     private lateinit var btnSave: Button
+    private lateinit var pbUploading: ProgressBar
 
     private lateinit var adapter: ImagePickerAdapter
     private lateinit var boardSize: BoardSize
@@ -57,6 +60,7 @@ class CreateActivity : AppCompatActivity() {
         rvImagePicker = findViewById(R.id.rvImagePicker)
         etGameName = findViewById(R.id.etGameName)
         btnSave = findViewById(R.id.btnSave)
+        pbUploading = findViewById(R.id.pbUploading)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         boardSize = intent.getSerializableExtra(EXTRA_BOARD_SIZE) as BoardSize
@@ -184,6 +188,7 @@ class CreateActivity : AppCompatActivity() {
     }
 
     private fun handleImageUploading(gameName: String) {
+        pbUploading.visibility = View.VISIBLE
         var didEncounterError = false
         val uploadedImageUrls = mutableListOf<String>()
         for ((index, photoUri) in chosenImageUris.withIndex()) {
@@ -202,10 +207,12 @@ class CreateActivity : AppCompatActivity() {
                         return@addOnCompleteListener
                     }
                     if (didEncounterError) {
+                        pbUploading.visibility = View.GONE
                         return@addOnCompleteListener
                     }
                     val downloadUrl = downloadUrlTask.result.toString()
                     uploadedImageUrls.add(downloadUrl)
+                    pbUploading.progress = uploadedImageUrls.size * 100 / chosenImageUris.size
                     Log.i(
                         TAG,
                         "Finished uploading $photoUri, num uploaded ${uploadedImageUrls.size}"
@@ -223,6 +230,7 @@ class CreateActivity : AppCompatActivity() {
         db.collection("games").document(gameName)
             .set(mapOf("images" to imageUrls))
             .addOnCompleteListener { gameCreationTask ->
+                pbUploading.visibility = View.GONE
                 if (!gameCreationTask.isSuccessful) {
                     Log.e(TAG, "Exception with game creation", gameCreationTask.exception)
                     Toast.makeText(this, "Failed game creation", Toast.LENGTH_LONG).show()
