@@ -21,7 +21,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.internal.TextWatcherAdapter
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -160,13 +159,36 @@ class CreateActivity : AppCompatActivity() {
     }
 
     private fun saveDataToFireBase() {
-        val customGameName = etGameName.text.toString()
         Log.i(TAG, "saveDataToFireBase")
+        // Disable the button so user cant create same game multiple times
+        btnSave.isEnabled = false
+        val customGameName = etGameName.text.toString()
+        // Check that we're not overwriting someone else's data
+        db.collection("games").document(customGameName).get().addOnSuccessListener { document ->
+            if (document != null && document.data != null) {
+                AlertDialog.Builder(this)
+                    .setTitle("Name taken")
+                    .setMessage("A game with the name '$customGameName' already exists. Please choose another name.")
+                    .setPositiveButton("OK", null)
+                    .show()
+                // If we get a failure then the button is enabled egain
+                btnSave.isEnabled = true
+            } else {
+                handleImageUploading(customGameName)
+            }
+        }.addOnFailureListener { exception ->
+            Log.e(TAG, "Encountered error while saving memory game", exception)
+            Toast.makeText(this, "Encountered error while saving memory game", Toast.LENGTH_SHORT).show()
+            btnSave.isEnabled = true
+        }
+    }
+
+    private fun handleImageUploading(gameName: String) {
         var didEncounterError = false
         val uploadedImageUrls = mutableListOf<String>()
         for ((index, photoUri) in chosenImageUris.withIndex()) {
             val imageByteArray = getImageByteArray(photoUri)
-            val filePath = "images/$customGameName/${System.currentTimeMillis()}-${index}.jpg"
+            val filePath = "images/$gameName/${System.currentTimeMillis()}-${index}.jpg"
             val photoReference = storage.reference.child(filePath)
             photoReference.putBytes(imageByteArray)
                 .continueWithTask { photoUploadTask ->
@@ -189,10 +211,11 @@ class CreateActivity : AppCompatActivity() {
                         "Finished uploading $photoUri, num uploaded ${uploadedImageUrls.size}"
                     )
                     if (uploadedImageUrls.size == chosenImageUris.size) {
-                        handleAllImagesUploaded(customGameName, uploadedImageUrls)
+                        handleAllImagesUploaded(gameName, uploadedImageUrls)
                     }
                 }
         }
+
     }
 
     private fun handleAllImagesUploaded(gameName: String, imageUrls: MutableList<String>) {
