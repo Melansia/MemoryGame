@@ -24,7 +24,8 @@ The following **required** functionality is completed:
 
 The following **extensions** are implemented:
 
-* [ ] 
+* [X] Added a bit of color and life to the UI when user wins the game
+* [ ] Changed the main UI colors
 
 ## Video Walk-through
 
@@ -32,9 +33,10 @@ Here's a walk-through of implemented features:
 
 | Before     | After      |
 |------------|-------------|
-| <img src="https://media.giphy.com/media/Y8LelsEWUUf2CxhmxY/giphy.gif"> | <img src="https://media.giphy.com/media/2V7EKp65lATyTVZ5RY/giphy.gif" width=''> |
+| <img src="https://media.giphy.com/media/sLMSPIUeb7r8aL7kk3/giphy.gif"> | <img src="https://media.giphy.com/media/BDuatTipKqlPaD02E1/giphy.gif" width=''> |
 
-GIF created with [Giphy](https://giphy.com).
+GIF created with [LICEcap](https://www.cockos.com/licecap/).
+GIF hosted on [Giphy](https://giphy.com).
 
 ## Notes
 
