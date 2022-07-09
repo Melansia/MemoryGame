@@ -14,4 +14,8 @@
     <item
         android:id="@+id/mi_cutom"
         android:title="Create custom game" />
+    <item
+        android:id="@+id/mi_download"
+        android:title="Download custom game"
+        app:showAsAction="never" />
 </menu>

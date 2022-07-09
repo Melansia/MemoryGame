@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -28,7 +29,7 @@ import utils.EXTRA_GAME_NAME
 
 class MainActivity : AppCompatActivity() {
 
-    companion object{
+    companion object {
         private const val TAG = "MainActivity"
         private const val CREATE_REQUEST_CODE = 42
     }
@@ -68,13 +69,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.mi_refresh ->{
-                if (memoryGame.getNumMoves() > 0 && !memoryGame.haveWonGame()){
+        when (item.itemId) {
+            R.id.mi_refresh -> {
+                if (memoryGame.getNumMoves() > 0 && !memoryGame.haveWonGame()) {
                     showAlertDialog("Quit your current game?", null, View.OnClickListener {
                         setupBoard()
                     })
-                }else{
+                } else {
                     setupBoard()
                 }
                 return true
@@ -86,6 +87,11 @@ class MainActivity : AppCompatActivity() {
             R.id.mi_cutom -> {
                 showCreationDialog()
                 return true
+            }
+            R.id.mi_download -> {
+                showDownloadDialog()
+                return true
+
             }
         }
         return super.onOptionsItemSelected(item)
@@ -103,12 +109,26 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
+    private fun showDownloadDialog() {
+        val boardDownloadView = LayoutInflater.from(this).inflate(R.layout.dialog_download_board, null)
+        showAlertDialog("Fetch memory game", boardDownloadView, View.OnClickListener {
+            // Grab the text of the game name that user wants to download
+            val etDownloadGame = boardDownloadView.findViewById<EditText>(R.id.etDownloadGame)
+            val gameToDownload = etDownloadGame.text.toString().trim()
+            downloadGame(gameToDownload)
+        })
+    }
+
     private fun downloadGame(customGameName: String) {
         db.collection("games").document(customGameName).get().addOnSuccessListener { document ->
             val userImageList = document.toObject(UserImageList::class.java)
             if (userImageList?.images == null) {
                 Log.e(TAG, "Invalid custom game data from Firestore")
-                Snackbar.make(clRoot, "Sorry, we couldn't find any such game, '$customGameName'", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(
+                    clRoot,
+                    "Sorry, we couldn't find any such game, '$customGameName'",
+                    Snackbar.LENGTH_LONG
+                ).show()
                 return@addOnSuccessListener
             }
             val numCard = userImageList.images.size * 2
@@ -159,7 +179,11 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun showAlertDialog(title: String, view: View?, positiveClickListener: View.OnClickListener) {
+    private fun showAlertDialog(
+        title: String,
+        view: View?,
+        positiveClickListener: View.OnClickListener
+    ) {
         AlertDialog.Builder(this)
             .setTitle(title)
             .setView(view)
@@ -171,7 +195,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupBoard() {
         supportActionBar?.title = gameName ?: getString(R.string.app_name)
-        when (boardSize){
+        when (boardSize) {
             BoardSize.EASY -> {
                 tvNumMoves.text = "Easy: 4 x 2"
                 tvNumPairs.text = "Pairs: 0 / 4"
@@ -188,21 +212,25 @@ class MainActivity : AppCompatActivity() {
         // Setting the initial color of pairs found to "none"
         tvNumPairs.setTextColor(ContextCompat.getColor(this, R.color.color_progress_none))
         memoryGame = MemoryGame(boardSize, customGameImages)
-        adapter = MemoryBoardAdapter(this, boardSize, memoryGame.cards, object: MemoryBoardAdapter.CardClickListener{
-            override fun onCardClicked(position: Int) {
-                updateGameWithFlip(position)
-                Log.i(TAG, "Card clicked $position")
-            }
+        adapter = MemoryBoardAdapter(
+            this,
+            boardSize,
+            memoryGame.cards,
+            object : MemoryBoardAdapter.CardClickListener {
+                override fun onCardClicked(position: Int) {
+                    updateGameWithFlip(position)
+                    Log.i(TAG, "Card clicked $position")
+                }
 
-        })
+            })
         rvBoard.adapter = adapter
         rvBoard.setHasFixedSize(true)
-        rvBoard.layoutManager = GridLayoutManager (this, boardSize.getWidth())
+        rvBoard.layoutManager = GridLayoutManager(this, boardSize.getWidth())
     }
 
     private fun updateGameWithFlip(position: Int) {
         // Error checking
-        if(memoryGame.haveWonGame()){
+        if (memoryGame.haveWonGame()) {
             // Alert user of an invalid move
             Snackbar.make(clRoot, "You already won!", Snackbar.LENGTH_LONG).show()
             return
@@ -212,7 +240,7 @@ class MainActivity : AppCompatActivity() {
             return
         }
         // Actually flip over card
-        if(memoryGame.fliCard(position)){
+        if (memoryGame.fliCard(position)) {
             Log.i(TAG, "Found a match! Num pairs found: ${memoryGame.numPairsFound}")
             val color = ArgbEvaluator().evaluate(
                 memoryGame.numPairsFound.toFloat() / boardSize.getNumPairs(),
@@ -221,7 +249,7 @@ class MainActivity : AppCompatActivity() {
             ) as Int
             tvNumPairs.setTextColor(color)
             tvNumPairs.text = "Pairs: ${memoryGame.numPairsFound} / ${boardSize.getNumPairs()}"
-            if (memoryGame.haveWonGame()){
+            if (memoryGame.haveWonGame()) {
                 Snackbar.make(clRoot, "You won! Congratulations.", Snackbar.LENGTH_LONG).show()
             }
         }
