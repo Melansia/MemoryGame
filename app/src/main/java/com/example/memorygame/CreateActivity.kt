@@ -226,7 +226,7 @@ class CreateActivity : AppCompatActivity() {
     }
 
     private fun handleAllImagesUploaded(gameName: String, imageUrls: MutableList<String>) {
-        // TODO: upload this info to Firestore
+        // upload this info to Firestore
         db.collection("games").document(gameName)
             .set(mapOf("images" to imageUrls))
             .addOnCompleteListener { gameCreationTask ->

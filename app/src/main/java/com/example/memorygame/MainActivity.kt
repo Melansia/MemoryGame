@@ -3,6 +3,7 @@ package com.example.memorygame
 import android.animation.ArgbEvaluator
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -14,7 +15,6 @@ import android.widget.EditText
 import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -26,6 +26,7 @@ import com.squareup.picasso.Picasso
 import models.BoardSize
 import models.MemoryGame
 import models.UserImageList
+import com.github.jinatonic.confetti.CommonConfetti
 import utils.EXTRA_BOARD_SIZE
 import utils.EXTRA_GAME_NAME
 
@@ -258,6 +259,7 @@ class MainActivity : AppCompatActivity() {
             tvNumPairs.text = "Pairs: ${memoryGame.numPairsFound} / ${boardSize.getNumPairs()}"
             if (memoryGame.haveWonGame()) {
                 Snackbar.make(clRoot, "You won! Congratulations.", Snackbar.LENGTH_LONG).show()
+                CommonConfetti.rainingConfetti(clRoot, intArrayOf(Color.RED, Color.GREEN, Color.BLUE)).oneShot()
             }
         }
         // After passing first 2 error checks the user has made a valid card flip
