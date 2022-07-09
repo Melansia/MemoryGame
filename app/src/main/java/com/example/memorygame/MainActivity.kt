@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.squareup.picasso.Picasso
 import models.BoardSize
 import models.MemoryGame
 import models.UserImageList
@@ -134,6 +135,11 @@ class MainActivity : AppCompatActivity() {
             val numCard = userImageList.images.size * 2
             boardSize = BoardSize.getByValue(numCard)
             customGameImages = userImageList.images
+            // Pre fetch all the images
+            for (imageUrl in userImageList.images) {
+                Picasso.get().load(imageUrl).fetch()
+            }
+            Snackbar.make(clRoot, "You're now playing '$customGameName'!", Snackbar.LENGTH_LONG).show()
             setupBoard()
             gameName = customGameName
         }.addOnFailureListener { exception ->
