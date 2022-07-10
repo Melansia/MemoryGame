@@ -10,4 +10,9 @@
     <color name="color_gray">#E0E0E0</color>
     <color name="color_progress_none">#DC1E0B</color>
     <color name="color_progress_full">#35BA01</color>
+    <color name="custom_yellow">#FA761B</color>
+    <color name="custom_red">#FF456D</color>
+    <color name="custom_purple">#AA5BEB</color>
+    <color name="custom_teal">#5A8EFF</color>
+    <color name="custom_green">#75FAE3</color>
 </resources>
