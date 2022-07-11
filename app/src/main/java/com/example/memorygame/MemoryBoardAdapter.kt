@@ -63,7 +63,7 @@ class MemoryBoardAdapter(
                     imageButton.setImageResource(memoryCard.identifier)
                 }
             } else {
-                imageButton.setImageResource(R.drawable.ic_launcher_background)
+                imageButton.setImageResource(R.drawable.horse_background)
             }
             // based on the value of property is matched or not to change the opacity
             // if is the cards are matched we set it to a lower value in order to fade it out
